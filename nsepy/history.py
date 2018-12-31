@@ -353,4 +353,22 @@ def get_rbi_ref_history_quanta(start, end):
     return df
 
 
+dprice_list_url = URLFetchSession(url='https://www.nseindia.com/content/historical/DERIVATIVES/%s/%s/fo%sbhav.csv.zip')
+
+def get_derivative_price_list(dt,):
+    MMM = dt.strftime("%b").upper()
+    yyyy = dt.strftime("%Y")
+
+    """
+    1. YYYY
+    2. MMM
+    3. ddMMMyyyy
+    """
+    res = dprice_list_url(yyyy, MMM, dt.strftime("%d%b%Y").upper() )
+    txt =  unzip_str(res.content)
+    fp = six.StringIO(txt)
+    df = pd.read_csv(fp)
+    del df['Unnamed: 15']
+    return df
+
 
